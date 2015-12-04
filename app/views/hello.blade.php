@@ -2,7 +2,8 @@
 @section('content')
 		<h1>Tüm Alt Başlıklar</h1>
 		@foreach($subtitles as $subtitle)
-			<h2><a href="{{ Request::root() }}/s/{{ $subtitle->slug}}">{{ $subtitle->name }}</a>
+			<h2>
+				{{ HTML::linkRoute('subtitle', $subtitle->name, [$subtitle->slug], array('class' => '')) }}
 			</h2>
 		@endforeach
 		{{ $subtitles->links() }}
@@ -11,7 +12,7 @@
 		<p>
 			<ul>
 				@foreach($posts as $post)
-					<li><strong>{{ $post->subtitle->name }}</strong> üzerine <strong>{{ $post->user->username }}</strong> tarafından: <a href="{{ Request::root() }}/s/{{ $post->subtitle->slug }}/p/{{ $post->id }}">{{ $post->title }}</a></li>
+					<li><strong>{{ $post->subtitle->name }}</strong> üzerine <strong>{{ $post->user->username }}</strong> tarafından: {{ HTML::linkRoute('post.view', $post->title, [$post->subtitle->slug,$post->id], []) }}</li>
 				@endforeach
 			</ul>
 		</p>

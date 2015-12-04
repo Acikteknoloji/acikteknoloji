@@ -22,7 +22,7 @@ class SubtitleController extends BaseController {
 
 	public function createSubtitle()
 	{
-		$rules = ["name" => "required|min:5","slug" => "required|min:3|unique:subtitles","description" => "required|min:10"];
+		$rules = ["name" => "required|min:3","slug" => "required|min:3|unique:subtitles","description" => "required|min:5"];
 		$inputs = ["name" => Input::get('name'),"slug" => Str::slug(Input::get('slug')),"description" => Input::get('description')];
 		$validator = Validator::make($inputs,$rules);
 		if($validator->passes())

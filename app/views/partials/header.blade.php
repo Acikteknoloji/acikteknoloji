@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{{ Request::root() }}">Açık Teknoloji</a>
+      {{ HTML::linkRoute('home', 'Açık Teknoloji', [], ["class" => "navbar-brand"]) }}
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -18,16 +18,18 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         @if(Auth::check())
-        <li><a href="{{ Request::root() }}/subtitle/create" class="btn btn-default btn-sm" style="color:white;">Yeni Alt Başlık</a></li>
+        <li>
+          {{ HTML::linkRoute('subtitle.create', 'Yeni Alt Başlık', [], ['class' => 'btn btn-default btn-sm','style' => 'color:white']) }}
+        </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Kullanıcı Paneli <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{{ Request::root() }}/logout">Çıkış Yap</a></li>
+            <li>{{ HTML::linkRoute('logout', 'Çıkış Yap', [], []) }}</li>
           </ul>
         </li>
         @else
-        <li><a href="{{ Request::root() }}/login">Giriş</a></li>
-        <li><a href="{{ Request::root() }}/register">Kaydol</a></li>
+        <li>{{ HTML::linkRoute('login', 'Giriş', [], []) }}</li>
+        <li>{{ HTML::linkRoute('register', 'Kaydol', [], []) }}</li>
         @endif
       </ul>
     </div><!-- /.navbar-collapse -->

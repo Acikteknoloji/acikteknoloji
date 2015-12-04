@@ -48,16 +48,18 @@
 }
 @stop
 @section('content')
-<h1><a href="{{ Request::root()}}/s/{{ $subtitle->slug }}">{{ $subtitle->name }}</a> <br /><small>{{ $subtitle->description }}</small></h1><br />
-<h2>{{ $post->title }}  - <small>{{ $post->user->username }} <a href="{{ Request::root() }}/vote/{{ $post->id }}/1">[+]</a> -
-<a href="{{ Request::root() }}/vote/{{ $post->id }}/0">[-]</a> -
+<h1><a href="{{ Request::root()}}/s/{{ $subtitle->slug }}">{{ $subtitle->name }}</a>
+  {{ HTML::linkRoute('subtitle', $subtitle->name, [$subtitle->slug], []) }}
+   <br /><small>{{ $subtitle->description }}</small></h1><br />
+<h2>{{ $post->title }}  - <small>{{ $post->user->username }} {{ HTML::linkRoute('vote', '[+]', [$post->id,1], []) }} -
+{{ HTML::linkRoute('vote', '[-]', [$post->id,0], []) }} -
 {{ $post->positiveVotes()->count() - $post->negativeVotes()->count() }} / {{ $post->votes()->count() }}</small></h2>
 <div class="post-content">{{ Markdown::parse($post->content) }}</div>
 @if(Auth::check())
   @if($post->user_id == Auth::user()->id)
   <span class="post-links">
-    <a class="post-link" href="{{ Request::root() }}/post/delete/{{ $post->id }}">Gönderiyi Sil</a> |
-    <a class="post-link" href="{{ Request::root() }}/post/edit/{{ $post->id }}">Gönderiyi Düzenle</a>
+    {{ HTML::linkRoute('post.delete', 'Gönderiyi Sil', [$post->id], ['class' => 'post-link']) }} |
+     {{ HTML::linkRoute('post.edit', 'Gönderiyi Düzenle', [$post->id], ['class' => 'post-link']) }}
   </span>
   @endif
 @endif
@@ -78,10 +80,7 @@
   <div class="panel panel-info">
     <div class="panel-heading text-center">Yorum Yap</div>
     <div class="panel-body">
-  @if(Session::has('comment_id'))
-    Seçilen Yorum: {{ Post::where('id',Session::get('comment_id'))->first()->created_at }} tarihinde {{ Post::where('id',Session::get('comment_id'))->first()->user->username }} tarafından oluşturuldu <a href="{{ Request::root() }}/removecomment">[Seçimi Temizle]</a>
-  @endif
-  {{ Form::open() }}
+  {{ Form::open(['post.comment']) }}
     {{ Form::textarea('content',null,['class' => 'form-control','placeholder' => 'Yorum','data-uk-htmleditor' => '{markdown:true}']) }}<br />
     {{ Form::hidden('comment_id',$post->id) }}
     </div>

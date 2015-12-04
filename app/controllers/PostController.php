@@ -47,7 +47,7 @@ class PostController extends BaseController {
 			$post = Post::find($id);
 			$post->content = Input::get('content');
 			$post->save();
-			return Redirect::to('/s/'.$post->subtitle->slug.'/p/'.$post->id);
+			return Redirect::back();
 		}
 		App::abort(404);
 	}
@@ -85,7 +85,7 @@ class PostController extends BaseController {
 				$post->subtitle_id = $subtitle->id;
 				$post->user_id = Auth::user()->id;
 				$post->save();
-				return Redirect::to('/s/'.$subtitle->slug."/p/".$post->id);
+				return Redirect::back();
 			}
 			return Redirect::back()->withErrors($validator);
 		}
@@ -112,7 +112,7 @@ class PostController extends BaseController {
 				$post->save();
 				if(Session::has('comment_id'))
 					Session::remove('comment_id');
-				return Redirect::to('/s/'.$subtitle->slug."/p/".$id."#post-".$post->id);
+				return Redirect::back();
 			}
 			return Redirect::back()->withErrors($validator);
 		}
