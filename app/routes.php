@@ -28,6 +28,15 @@ Route::get('/removecomment',['as' => 'removecomment','uses' => 'PostController@r
 Route::get('/subtitle/create',['as' => 'subtitle.create','uses' => 'SubtitleController@createSubtitleView'])->before('auth');
 Route::post('/subtitle/create',['uses' => 'SubtitleController@createSubtitle'])->before('auth');
 
+Route::group(['domain' => '{subtitle}.acikteknoloji.com'],function()
+{
+  Route::get('/',['as' => 'subtitle','uses' => 'SubtitleController@showSubtitle']);
+  Route::get('post/create',['as' => 'post.create','uses' => 'PostController@createPostView'])->before('auth');
+  Route::post('post/create',['uses' => 'PostController@createPost'])->before('auth');
+  Route::get('p/{id}',['as' => 'post.view','uses' => 'PostController@showPost']);
+  Route::post('p/{id}',['uses' => 'PostController@makeComment'])->before('auth');
+});
+
 Route::get('/subtitle/delete/{id}',['uses' => 'SubtitleController@deleteSubtitle'])->before('auth');
 Route::get('/post/delete/{id}',['uses' => 'PostController@deletePost'])->before('auth');
 
