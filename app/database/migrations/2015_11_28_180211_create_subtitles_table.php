@@ -20,7 +20,6 @@ class CreateSubtitlesTable extends Migration {
 			$table->integer('user_id')->unsigned();
 			$table->string('description',96);
 			$table->boolean('active')->default(0);
-			$table->foreign('user_id')->references('id')->on('users');
 		});
 	}
 
@@ -31,9 +30,6 @@ class CreateSubtitlesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('subtitles',function($table){
-			$table->dropForeign('subtitles_user_id_foreign');
-		});
 		Schema::drop('subtitles');
 	}
 

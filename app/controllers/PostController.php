@@ -85,7 +85,7 @@ class PostController extends BaseController {
 				$post->subtitle_id = $subtitle->id;
 				$post->user_id = Auth::user()->id;
 				$post->save();
-				return Redirect::back();
+				return Redirect::route('subtitle',$subtitle->slug);
 			}
 			return Redirect::back()->withErrors($validator);
 		}

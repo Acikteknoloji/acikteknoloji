@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('extra.style')
 @if(Auth::check())
-@if(Auth::user()->id == $subtitle->user_id && isset($_GET['p']))
+@if(Auth::user()->isAdminOn($subtitle->id) && isset($_GET['p']))
 {{ $subtitle->unvalidcustomcss }}
 @else
 {{ $subtitle->customcss }}
@@ -11,7 +11,7 @@
 @endif
 @stop
 @section('content')
-<h1>{{ $subtitle->name }} <br /><small>{{ $subtitle->description }}
+<h1>{{ $subtitle->name }}<small> @if(Auth::check()) @if(Auth::user()->isAdminOn($subtitle->id)) Admin @endif @endif </small> <br /><small>{{ $subtitle->description }}
   @if(Auth::check())
     @if($subtitle->user_id == Auth::user()->id)
       <small>

@@ -11,6 +11,6 @@ class Subtitle extends Eloquent
 
   public function user()
   {
-    return $this->belongsTo('User');
+    return $this->belongsToMany('User','user_subtitle','user_id','subtitle_id');
   }
 }

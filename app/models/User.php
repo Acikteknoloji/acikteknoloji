@@ -25,4 +25,19 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	protected $hidden = array('password', 'remember_token');
 
+	public function posts()
+	{
+		return $this->hasMany('Post');
+	}
+
+	public function isAdminOn($id)
+	{
+		return DB::Table('user_subtitle')->where('isAdmin',1)->where('subtitle_id',$id)->where('user_id',Auth::user()->id)->exists();
+	}
+
+	public function subtitles()
+	{
+		return $this->hasMany('Subtitle','user_subtitle','user_id','subtitle_id');
+	}
+
 }

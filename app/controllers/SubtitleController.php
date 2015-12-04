@@ -32,9 +32,9 @@ class SubtitleController extends BaseController {
 			$subtitle->slug = Input::get('slug');
 			$subtitle->description = Input::get('description');
 			$subtitle->unvalidcustomcss = Input::get('css');
-			$subtitle->user_id = Auth::user()->id;
 			$subtitle->save();
-			return Redirect::to('/s/'.Input::get('slug'));
+			DB::Table('user_subtitle')->insert(['user_id' => Auth::user()->id,'subtitle_id' => $subtitle->id,'isAdmin' => 1]);
+			return Redirect::route('subtitle',$subtitle->slug);
 		}
 		return Redirect::back()->withErrors($validator);
 	}
@@ -51,7 +51,7 @@ class SubtitleController extends BaseController {
 
 	public function deleteSubtitle($id)
 	{
-		if(Subtitle::where('id',$id)->where('user_id',Auth::user()->id)->exists())
+		if(Auth::user()->isAdminOn($id))
 		{
 			$subtitle = Subtitle::find($id);
 			$subtitle->destroy($id);

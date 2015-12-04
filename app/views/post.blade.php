@@ -14,7 +14,7 @@
 @stop
 @section('extra.style')
 @if(Auth::check())
-@if(Auth::user()->id == $subtitle->user_id && isset($_GET['p']))
+@if(Auth::user()->isAdminOn($subtitle->id) && isset($_GET['p']))
 {{ $subtitle->unvalidcustomcss }}
 @else
 {{ $subtitle->customcss }}
@@ -48,22 +48,25 @@
 }
 @stop
 @section('content')
-<h1><a href="{{ Request::root()}}/s/{{ $subtitle->slug }}">{{ $subtitle->name }}</a>
-  {{ HTML::linkRoute('subtitle', $subtitle->name, [$subtitle->slug], []) }}
-   <br /><small>{{ $subtitle->description }}</small></h1><br />
+<div class="panel panel-default">
+  <div class="panel-heading">
 <h2>{{ $post->title }}  - <small>{{ $post->user->username }} {{ HTML::linkRoute('vote', '[+]', [$post->id,1], []) }} -
 {{ HTML::linkRoute('vote', '[-]', [$post->id,0], []) }} -
-{{ $post->positiveVotes()->count() - $post->negativeVotes()->count() }} / {{ $post->votes()->count() }}</small></h2>
+{{ $post->positiveVotes()->count() - $post->negativeVotes()->count() }} / {{ $post->votes()->count() }}</small></h2></div>
+<div class="panel-body">
 <div class="post-content">{{ Markdown::parse($post->content) }}</div>
+</div>
 @if(Auth::check())
   @if($post->user_id == Auth::user()->id)
+<div class="panel-footer text-right">
   <span class="post-links">
     {{ HTML::linkRoute('post.delete', 'Gönderiyi Sil', [$post->id], ['class' => 'post-link']) }} |
      {{ HTML::linkRoute('post.edit', 'Gönderiyi Düzenle', [$post->id], ['class' => 'post-link']) }}
   </span>
+</div>
   @endif
 @endif
-<hr />
+</div>
 <p>
   @if(Post::where('isComment',$post->id)->count() > 0)
   @foreach(Post::where('isComment',$post->id)->get() as $comment)
@@ -77,6 +80,7 @@
   </div>
   @endif
   <br />
+  @if(Auth::check())
   <div class="panel panel-info">
     <div class="panel-heading text-center">Yorum Yap</div>
     <div class="panel-body">
@@ -89,4 +93,5 @@
   {{ Form::close() }}
     </div>
   </div>
+  @endif
 @stop
