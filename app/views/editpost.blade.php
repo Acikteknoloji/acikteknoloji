@@ -51,7 +51,8 @@
         </div>
         @endif
 {{ Form::open() }}
+  {{ Form::text('title',$post->title,['class' => 'form-control','placeholder' => 'Burayı düzenlemenize gerek yok']) }}<br />
   {{ Form::textarea('content',$post->content,['class' => 'form-control','placeholder' => 'Gönderi','data-uk-htmleditor' => '{markdown:true}']) }}<br />
   {{ Form::submit('Gönderiyi düzenle',['class' => 'btn btn-lg btn-success'] )}}
-{{ Form::close() }}
+{{ Form::close() }}<br />
 @stop

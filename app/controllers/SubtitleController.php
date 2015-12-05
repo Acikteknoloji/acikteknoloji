@@ -175,7 +175,7 @@ class SubtitleController extends BaseController {
 			$subtitle = Subtitle::where('slug',$slug)->first();
 			if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->where('isAdmin','!=',0)->exists())
 			{
-				$posts = Post::where('subtitle_id',$subtitle->id)->where('isComment',0)->orderBy('publish','DESC')->paginate(50);
+				$posts = Post::where('subtitle_id',$subtitle->id)->where('isComment',0)->orderBy('publish','ASC')->paginate(50);
 				return View::make('moderation.home')->with(['subtitle' => $subtitle,'posts' => $posts]);
 			}
 			App::abort(404);
