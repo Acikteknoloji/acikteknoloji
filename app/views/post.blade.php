@@ -57,7 +57,7 @@
 <div class="post-content">{{ Markdown::parse($post->content) }}</div>
 </div>
 @if(Auth::check())
-  @if($post->user_id == Auth::user()->id)
+  @if($post->user_id == Auth::user()->id || DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','!=',0)->exists())
 <div class="panel-footer text-right">
   <span class="post-links">
     {{ HTML::linkRoute('post.delete', 'Gönderiyi Sil', [$post->id], ['class' => 'post-link']) }} |

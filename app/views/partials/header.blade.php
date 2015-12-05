@@ -25,6 +25,9 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Kullanıcı Paneli <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li>{{ HTML::linkRoute('logout', 'Çıkış Yap', [], []) }}</li>
+            @if(Auth::user()->hasRole('admin'))
+            <li>{{ HTML::linkRoute('admin.home','Yönetici Paneli',[],[]) }}</li>
+            @endif
           </ul>
         </li>
         @else

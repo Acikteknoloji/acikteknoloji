@@ -22,8 +22,12 @@ class PostController extends BaseController {
 			$subtitle = Subtitle::where('slug',$subtitle)->first();
 			if(Post::where('id',$id)->where('isComment','0')->exists())
 			{
-				$post = Post::where('id',$id)->first();
-				return View::make('post')->with(['subtitle' => $subtitle,'post' => $post]);
+				if($subtitle->active == 1 || Auth::user()->hasRole('admin'))
+				{
+					$post = Post::where('id',$id)->first();
+					return View::make('post')->with(['subtitle' => $subtitle,'post' => $post]);
+				}
+				App::abort(404);
 			}
 			App::abort(404);
 		}
@@ -32,21 +36,28 @@ class PostController extends BaseController {
 
 	public function editPostView($id)
 	{
-		if(Post::where('id',$id)->where('user_id',Auth::user()->id)->exists())
+		if(Post::where('id',$id)->exists())
 		{
-			$post = Post::find($id);
-			return View::make('editpost')->with(['post' => $post]);
+			if($post->user_id == Auth::user()->id || DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','!=',0)->exists())
+			{
+				$post = Post::find($id);
+				return View::make('editpost')->with(['post' => $post]);
+			}
+			App::abort(404);
 		}
 		App::abort(404);
 	}
 
 	public function editPost($id)
 	{
-		if(Post::where('id',$id)->where('user_id',Auth::user()->id)->exists())
+		if(Post::where('id',$id)->exists())
 		{
-			$post = Post::find($id);
-			$post->content = Input::get('content');
-			$post->save();
+			if($post->user_id == Auth::user()->id || DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','!=',0)->exists())
+			{
+				$post = Post::find($id);
+				$post->content = Input::get('content');
+				$post->save();
+			}
 			return Redirect::back();
 		}
 		App::abort(404);
@@ -57,7 +68,15 @@ class PostController extends BaseController {
 		if(Subtitle::where('slug',$subtitle)->exists())
 		{
 			$subtitle = Subtitle::where('slug',$subtitle)->first();
-			return View::make('createpost')->with(['subtitle' => $subtitle]);
+			if($subtitle->active == 1 || Auth::user()->hasRole('admin'))
+			{
+				if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id))
+				{
+					return View::make('createpost')->with(['subtitle' => $subtitle]);
+				}
+				return Redirect::route('subtitle',$subtitle->slug);
+			}
+			App::abort(404);
 		}
 		App::abort(404);
 	}
@@ -67,27 +86,35 @@ class PostController extends BaseController {
 		if(Subtitle::where('slug',$subtitle)->exists())
 		{
 			$subtitle = Subtitle::where('slug',$subtitle)->first();
-			$rules = ["title" => "required|min:9","content" => "required"];
-			$inputs = Input::all();
-			$validator = Validator::make($inputs,$rules);
-			if($validator->passes())
+			if($subtitle->active == 1 || Auth::user()->hasRole('admin'))
 			{
-				$link = null;
-				$post = new Post();
-				$post->title = Input::get('title');
-				$post->content = Input::get('content');
-				if(Input::get('link') != null && filter_var(Input::get('link'),FILTER_VALIDATE_URL))
+				if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id))
 				{
-					$link = Input::get('link');
+					$rules = ["title" => "required|min:9","content" => "required"];
+					$inputs = Input::all();
+					$validator = Validator::make($inputs,$rules);
+					if($validator->passes())
+					{
+						$link = null;
+						$post = new Post();
+						$post->title = Input::get('title');
+						$post->content = Input::get('content');
+						if(Input::get('link') != null && filter_var(Input::get('link'),FILTER_VALIDATE_URL))
+						{
+							$link = Input::get('link');
+						}
+						$post->isLink = $link;
+						$post->isComment = 0;
+						$post->subtitle_id = $subtitle->id;
+						$post->user_id = Auth::user()->id;
+						$post->save();
+						return Redirect::route('subtitle',$subtitle->slug);
+					}
+					return Redirect::back()->withErrors($validator);
 				}
-				$post->isLink = $link;
-				$post->isComment = 0;
-				$post->subtitle_id = $subtitle->id;
-				$post->user_id = Auth::user()->id;
-				$post->save();
 				return Redirect::route('subtitle',$subtitle->slug);
 			}
-			return Redirect::back()->withErrors($validator);
+			App::abort(404);
 		}
 		App::abort(404);
 	}
@@ -97,44 +124,34 @@ class PostController extends BaseController {
 		if(Subtitle::where('slug',$subtitle)->exists() && Post::where('id',$id)->exists())
 		{
 			$subtitle = Subtitle::where('slug',$subtitle)->first();
-			$rules = ["content" => "required"];
-			$inputs = Input::all();
-			$validator = Validator::make($inputs,$rules);
-			if($validator->passes())
+			if($subtitle->active == 1 || Auth::user()->hasRole('admin'))
 			{
-				$comment = $id;
-				$post = new Post();
-				$post->content = Input::get('content');
-				$comment = Input::get('comment_id');
-				$post->isComment = $comment;
-				$post->subtitle_id = $subtitle->id;
-				$post->user_id = Auth::user()->id;
-				$post->save();
-				if(Session::has('comment_id'))
-					Session::remove('comment_id');
-				return Redirect::back();
+				if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id))
+				{
+					$rules = ["content" => "required"];
+					$inputs = Input::all();
+					$validator = Validator::make($inputs,$rules);
+					if($validator->passes())
+					{
+						$comment = $id;
+						$post = new Post();
+						$post->content = Input::get('content');
+						$comment = Input::get('comment_id');
+						$post->isComment = $comment;
+						$post->subtitle_id = $subtitle->id;
+						$post->user_id = Auth::user()->id;
+						$post->save();
+						if(Session::has('comment_id'))
+							Session::remove('comment_id');
+						return Redirect::back();
+					}
+					return Redirect::back()->withErrors($validator);
+				}
+				return Redirect::route('subtitle',$subtitle->slug);
 			}
-			return Redirect::back()->withErrors($validator);
+			App::abort(404);
 		}
 		App::abort(404);
-	}
-
-	public function pickComment($id)
-	{
-		if(Post::where('id',$id)->exists())
-		{
-			Session::put('comment_id',$id);
-			return Redirect::back();
-		}
-		return Redirect::back();
-	}
-
-	public function removeComment()
-	{
-		if(Session::has('comment_id'))
-			Session::remove('comment_id');
-
-		return Redirect::back();
 	}
 
 	public function vote($id,$votestatus)
@@ -161,14 +178,19 @@ class PostController extends BaseController {
 
 	public function deletePost($id)
 	{
-		if(Post::where('id',$id)->where('user_id',Auth::user()->id)->exists())
+		if(Post::where('id',$id)->exists())
 		{
 			$post = Post::find($id);
-			foreach($post->children()->get() as $children)
+			$subtitle = Subtitle::where('id',$post->subtitle_id)->first();
+			if($post->user_id == Auth::user()->id || DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','!=',0)->exists())
 			{
-				$children->destroy($children->id);
+				foreach($post->children()->get() as $children)
+				{
+					$children->destroy($children->id);
+				}
+				$post->destroy($id);
 			}
-			$post->destroy($id);
+			return Redirect::back();
 		}
 		return Redirect::back();
 	}

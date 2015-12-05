@@ -11,15 +11,7 @@
 @endif
 @stop
 @section('content')
-<h1>{{ $subtitle->name }}<small> @if(Auth::check()) @if(Auth::user()->isAdminOn($subtitle->id)) Admin @endif @endif </small> <br /><small>{{ $subtitle->description }}
-  @if(Auth::check())
-    @if($subtitle->user_id == Auth::user()->id)
-      <small>
-        {{ HTML::linkRoute('subtitle.delete', 'Sayfayı Sil', [$subtitle->id], []) }}
-      </small>
-    @endif
-  @endif
-</h1>
+<h1>{{ $subtitle->name }}<small> @if(Auth::check()) @if(Auth::user()->isAdminOn($subtitle->id)) Admin @endif @endif </small> <br /><small>{{ $subtitle->description }}</h1>
 <hr />
 <p>
   <ul class="post-list">
@@ -50,6 +42,18 @@
 </p>
 <hr />
 <p>
-{{ HTML::linkRoute('post.create', 'Yeni Gönder', [$subtitle->slug], ['class' => 'btn btn-success btn-md']) }}
+<span class="pull-left">{{ HTML::linkRoute('post.create', 'Yeni Gönder', [$subtitle->slug], ['class' => 'btn btn-success btn-md']) }}</span>
+@if(Auth::check())
+<span class="pull-right">
+  @if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->exists())
+    {{ HTML::linkRoute('subtitle.signout','Üyelikten Çık',[$subtitle->slug],['class' => 'btn btn-danger btn-md']) }} 
+    @if(DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','=',1)->exists())
+    {{ HTML::linkRoute('subadmin.home','Yönetici Paneli',[$subtitle->slug],['class' => 'btn btn-default btn-md']) }}
+    @endif
+  @else
+    {{ HTML::linkRoute('subtitle.signup','Üye Ol',[$subtitle->slug],['class' => 'btn btn-info btn-md']) }}
+  @endif
+</span>
+@endif
 </p>
 @stop

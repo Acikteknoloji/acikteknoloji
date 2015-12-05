@@ -7,7 +7,7 @@
     {{ $comment->positiveVotes()->count() - $comment->negativeVotes()->count() }} / {{ $comment->votes()->count() }}
     <button class="btn btn-default btn-sm" type="button" data-toggle="collapse" data-target="#reply-{{ $comment->id }}">Yanıtla</button>
     @if(Auth::check())
-      @if($comment->user_id == Auth::user()->id)
+      @if($comment->user_id == Auth::user()->id || DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','!=',0)->exists())
          - <small>{{ HTML::linkRoute('post.delete', 'Gönderiyi Sil', [$comment->id], ['class' => 'post-link']) }}</small>
       @endif
     @endif
