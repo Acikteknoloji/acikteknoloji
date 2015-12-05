@@ -68,4 +68,11 @@ Route::group(['domain' => '{subtitle}.'.Config::get('app.domain')],function()
     Route::get('/upgrade/{id}',['as' => 'subadmin.makemod','uses' => 'SubtitleController@adminMakeMod']);
     Route::get('/downgrade/{id}',['as' => 'subadmin.makeuser','uses' => 'SubtitleController@adminMakeUser']);
   });
+
+  Route::group(['prefix' => 'moderation','before' => 'auth'],function()
+  {
+    Route::get('/',['as' => 'moderation.home','uses' => 'SubtitleController@moderation']);
+    Route::get('/publish/{id}',['as' => 'moderation.publish','uses' =>'SubtitleController@publishPost']);
+    Route::get('/draft/{id}',['as' => 'moderation.draft','uses' => 'SubtitleController@draftPost']);
+  });
 });

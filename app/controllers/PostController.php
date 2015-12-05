@@ -38,10 +38,11 @@ class PostController extends BaseController {
 	{
 		if(Post::where('id',$id)->exists())
 		{
+			$post = Post::find($id);
+			$subtitle = $post->subtitle;
 			if($post->user_id == Auth::user()->id || DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','!=',0)->exists())
 			{
-				$post = Post::find($id);
-				return View::make('editpost')->with(['post' => $post]);
+				return View::make('editpost')->with(['post' => $post,'subtitle' => $subtitle]);
 			}
 			App::abort(404);
 		}
@@ -52,13 +53,14 @@ class PostController extends BaseController {
 	{
 		if(Post::where('id',$id)->exists())
 		{
+			$post = Post::find($id);
+			$subtitle = $post->subtitle;
 			if($post->user_id == Auth::user()->id || DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','!=',0)->exists())
 			{
-				$post = Post::find($id);
 				$post->content = Input::get('content');
 				$post->save();
 			}
-			return Redirect::back();
+			return Redirect::route('post.view',[$subtitle->slug,$post->id]);
 		}
 		App::abort(404);
 	}
@@ -105,6 +107,7 @@ class PostController extends BaseController {
 						}
 						$post->isLink = $link;
 						$post->isComment = 0;
+						$post->publish = 0;
 						$post->subtitle_id = $subtitle->id;
 						$post->user_id = Auth::user()->id;
 						$post->save();
@@ -139,6 +142,7 @@ class PostController extends BaseController {
 						$comment = Input::get('comment_id');
 						$post->isComment = $comment;
 						$post->subtitle_id = $subtitle->id;
+						$post->publish = 1;
 						$post->user_id = Auth::user()->id;
 						$post->save();
 						if(Session::has('comment_id'))

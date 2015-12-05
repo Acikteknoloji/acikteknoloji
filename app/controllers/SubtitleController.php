@@ -168,4 +168,61 @@ class SubtitleController extends BaseController {
 		App::abort(404);
 	}
 
+	public function moderation($slug)
+	{
+		if(Subtitle::where('slug',$slug)->exists())
+		{
+			$subtitle = Subtitle::where('slug',$slug)->first();
+			if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->where('isAdmin','!=',0)->exists())
+			{
+				$posts = Post::where('subtitle_id',$subtitle->id)->where('isComment',0)->orderBy('publish','DESC')->paginate(50);
+				return View::make('moderation.home')->with(['subtitle' => $subtitle,'posts' => $posts]);
+			}
+			App::abort(404);
+		}
+		App::abort(404);
+	}
+
+	public function publishPost($slug,$id)
+	{
+		if(Subtitle::where('slug',$slug)->exists())
+		{
+			$subtitle = Subtitle::where('slug',$slug)->first();
+			if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->where('isAdmin','!=',0)->exists())
+			{
+				if(Post::where('id',$id)->where('publish',0)->exists())
+				{
+					$post = Post::where('id',$id)->first();
+					$post->publish = 1;
+					$post->save();
+					return Redirect::route('moderation.home',$slug);
+				}
+				App::abort(404);
+			}
+			App::abort(404);
+		}
+		App::abort(404);
+	}
+
+	public function draftPost($slug,$id)
+	{
+		if(Subtitle::where('slug',$slug)->exists())
+		{
+			$subtitle = Subtitle::where('slug',$slug)->first();
+			if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->where('isAdmin','!=',0)->exists())
+			{
+				if(Post::where('id',$id)->where('publish',1)->exists())
+				{
+					$post = Post::where('id',$id)->first();
+					$post->publish = 0;
+					$post->save();
+					return Redirect::route('moderation.home',$slug);
+				}
+				App::abort(404);
+			}
+			App::abort(404);
+		}
+		App::abort(404);
+	}
+
 }

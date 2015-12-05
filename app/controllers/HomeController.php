@@ -18,7 +18,7 @@ class HomeController extends BaseController {
 	public function showWelcome()
 	{
 		$subtitles = Subtitle::where('active',1)->paginate(15);
-		$posts = Post::Where('isComment',0)->take(30)->get();
+		$posts = Post::Where('isComment',0)->where('publish',1)->take(30)->get();
 		return View::make('hello')->with(['posts' => $posts,'subtitles' => $subtitles]);
 	}
 

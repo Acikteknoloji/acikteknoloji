@@ -15,7 +15,7 @@
 <hr />
 <p>
   <ul class="post-list">
-  @foreach($subtitle->posts()->where("isComment",0)->get() as $post)
+  @foreach($subtitle->posts()->where("isComment",0)->where('publish',1)->get() as $post)
   <li class="post-list-item @if($post->isLink != null ) link @endif">
     @if(Auth::check())
     {{ HTML::linkRoute('vote', '[+]', [$post->id,1], []) }} -
@@ -46,9 +46,12 @@
 @if(Auth::check())
 <span class="pull-right">
   @if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->exists())
-    {{ HTML::linkRoute('subtitle.signout','Üyelikten Çık',[$subtitle->slug],['class' => 'btn btn-danger btn-md']) }} 
+    {{ HTML::linkRoute('subtitle.signout','Üyelikten Çık',[$subtitle->slug],['class' => 'btn btn-danger btn-md']) }}
     @if(DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','=',1)->exists())
     {{ HTML::linkRoute('subadmin.home','Yönetici Paneli',[$subtitle->slug],['class' => 'btn btn-default btn-md']) }}
+    @endif
+    @if(DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','=',2)->orWhere('isAdmin',1)->exists())
+    {{ HTML::linkRoute('moderation.home','Moderasyon Paneli',[$subtitle->slug],['class' => 'btn btn-default btn-md']) }}
     @endif
   @else
     {{ HTML::linkRoute('subtitle.signup','Üye Ol',[$subtitle->slug],['class' => 'btn btn-info btn-md']) }}
