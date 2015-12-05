@@ -160,6 +160,7 @@ class SubtitleController extends BaseController {
 			if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->exists())
 			{
 				DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->where('isAdmin',0)->delete();
+				DB::Table('posts')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->delete();
 				return Redirect::back();
 			}
 			App::abort(404);

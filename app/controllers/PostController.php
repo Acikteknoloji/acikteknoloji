@@ -70,7 +70,7 @@ class PostController extends BaseController {
 			$subtitle = Subtitle::where('slug',$subtitle)->first();
 			if($subtitle->active == 1 || Auth::user()->hasRole('admin'))
 			{
-				if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id))
+				if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->exists())
 				{
 					return View::make('createpost')->with(['subtitle' => $subtitle]);
 				}
@@ -88,7 +88,7 @@ class PostController extends BaseController {
 			$subtitle = Subtitle::where('slug',$subtitle)->first();
 			if($subtitle->active == 1 || Auth::user()->hasRole('admin'))
 			{
-				if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id))
+				if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->exists())
 				{
 					$rules = ["title" => "required|min:9","content" => "required"];
 					$inputs = Input::all();
