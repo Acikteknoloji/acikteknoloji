@@ -10,6 +10,8 @@
 | and give it the Closure to execute when that URI is requested.
 |
 */
+Route::when('*','www');
+
 Route::group(['domain' => Config::get('app.domain')],function()
 {
   Route::get('/',['as' => 'home','uses' => 'HomeController@showWelcome']);
@@ -50,7 +52,7 @@ Route::group(['domain' => Config::get('app.domain')],function()
   Entrust::routeNeedsRole( 'admin*', 'admin' );
 });
 
-Route::group(['domain' => '{subtitle}.'.Config::get('app.domain')],function()
+Route::group(['domain' => '{subdomain}.'.Config::get('app.domain')],function()
 {
   Route::get('/',['as' => 'subtitle','uses' => 'SubtitleController@showSubtitle']);
   Route::get('/signup',['as' => 'subtitle.signup','uses' => 'SubtitleController@signup'])->before('auth');

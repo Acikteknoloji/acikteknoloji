@@ -33,6 +33,17 @@ App::after(function($request, $response)
 |
 */
 
+Route::filter('www', function($route, $request)
+{
+    $host = $request->getHost();
+    $parts = explode('.', $host);
+    $subdomain = $parts[0];
+
+		if($subdomain == 'www')
+			return Redirect::route('home');
+
+});
+
 Route::filter('auth', function()
 {
 	if (Auth::guest())

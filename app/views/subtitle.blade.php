@@ -49,8 +49,8 @@
     {{ HTML::linkRoute('subtitle.signout','Üyelikten Çık',[$subtitle->slug],['class' => 'btn btn-danger btn-md']) }}
     @if(DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','=',1)->exists())
     {{ HTML::linkRoute('subadmin.home','Yönetici Paneli',[$subtitle->slug],['class' => 'btn btn-default btn-md']) }}
-    @endif
-    @if(DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','=',2)->orWhere('isAdmin',1)->exists())
+	{{ HTML::linkRoute('moderation.home','Moderasyon Paneli',[$subtitle->slug],['class' => 'btn btn-default btn-md']) }}
+    @elseif(DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin',2)->exists())
     {{ HTML::linkRoute('moderation.home','Moderasyon Paneli',[$subtitle->slug],['class' => 'btn btn-default btn-md']) }}
     @endif
   @else
