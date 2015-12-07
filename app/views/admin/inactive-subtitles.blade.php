@@ -10,7 +10,6 @@
           <thead>
             <th>Sayfa İsmi</th>
             <th>Sayfa Açıklaması</th>
-            <th>Kurucu</th>
             <th>Önizle</th>
             <th>Düzenle</th>
             <th>Yayın Durumu</th>
@@ -21,7 +20,6 @@
               <tr>
                 <td>{{ $subtitle->name }}</td>
                 <td>{{ $subtitle->description }}</td>
-                <td>{{ $subtitle->user()->where('isAdmin',1)->first()->username }}
                 <td>{{ HTML::linkRoute('subtitle','Önizle',[$subtitle->slug]) }}</td>
                 <td>{{ HTML::linkRoute('admin.edit.subtitle','Düzenle',[$subtitle->slug]) }}</td>
                 <td>{{ HTML::linkRoute('admin.activate.subtitle','Onayla',[$subtitle->slug]) }}</td>

@@ -14,6 +14,10 @@ Route::when('*','www');
 
 Route::group(['domain' => Config::get('app.domain')],function()
 {
+  Route::get('/notifs/{last}',['as' => 'notifs','uses' => 'HomeController@notifs'])->before('auth');
+  Route::get('/notifcount',['as' => 'notifcount','uses' => 'HomeController@notifCount'])->before('auth');
+  Route::get('/markasread/{id}',['as' => 'markasread','uses' => 'HomeController@markAsRead'])->before('auth');
+  Route::get('/deletenotify/{id}',['as' => 'deletenotify','uses' => 'HomeController@deleteNotify'])->before('auth');
   Route::get('/',['as' => 'home','uses' => 'HomeController@showWelcome']);
   Route::get('/search',['as' => 'search','uses' => 'HomeController@search']);
   Route::get('/login',['as' => 'login','uses' => 'HomeController@loginView'])->before('guest');

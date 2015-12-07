@@ -31,6 +31,47 @@ body {
   text-decoration: none;
   color:#3c3c3c;
 }
+
+.notifications{
+  max-height:264px;
+  overflow-y:auto;
+  overflow-x: hidden;
+  width:346px;
+
+}
+
+.notification{
+  width:328px;
+  border-top:1px solid #d4d4d4;
+  border-bottom:1px solid #d4d4d4;
+  padding-bottom:8px;
+  height:132px;
+}
+.read{
+  background-color:#fff;
+}
+.unread{
+  background-color:#eaeaea;
+}
+.notification .img-holder{
+  width:70px;
+  height:70px;
+  float:left;
+  display:block;
+  padding:10px;
+  margin-top:20px;
+}
+.notification .notification-holder{
+  width:256px;
+  height:auto;
+  float:right;
+  display:block;
+  padding-top:6px;
+}
+.notification .btn-default{
+  color:#fff;
+  margin-bottom:10px;
+}
 @yield('extra.style')
 </style>
 @yield('extra.head')

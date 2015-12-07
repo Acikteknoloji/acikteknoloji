@@ -22,6 +22,35 @@ class HomeController extends BaseController {
 		return View::make('hello')->with(['posts' => $posts,'subtitles' => $subtitles]);
 	}
 
+	public function notifs($last)
+	{
+		return Response::json(Notification::where('user_id',Auth::user()->id)->where('id','>',$last)->get());
+	}
+
+	public function markAsRead($id)
+	{
+		if(Notification::where('user_id',Auth::user()->id)->where('id',$id)->exists())
+		{
+			$noty = Notification::find($id);
+			$noty->isRead = 1;
+			$noty->save();
+		}
+	}
+
+	public function deleteNotify($id)
+	{
+		if(Notification::where('user_id',Auth::user()->id)->where('id',$id)->exists())
+		{
+			$noty = Notification::find($id);
+			$noty->delete();
+		}
+	}
+
+	public function notifCount()
+	{
+		return Response::json(["unread" => Auth::user()->unreadNotifs()]);
+	}
+
 	public function search()
 	{
 		$term = Request::input('q');

@@ -21,6 +21,11 @@
         <li>
           {{ HTML::linkRoute('subtitle.create', 'Yeni Alt Başlık', [], ['class' => 'btn btn-default btn-sm','style' => 'color:white']) }}
         </li>
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bildirimler <span class="badge" id="notifcount"></span> <span class="caret"></span></a>
+          <ul class="dropdown-menu notifications" id="notifications">
+
+          </ul>
+        </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Kullanıcı Paneli <span class="caret"></span></a>
           <ul class="dropdown-menu">

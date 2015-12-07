@@ -107,10 +107,17 @@ class PostController extends BaseController {
 						}
 						$post->isLink = $link;
 						$post->isComment = 0;
-						$post->publish = 0;
+						if(DB::Table('user_subtitle')->where('subtitle_id',$subtitle->id)->where('user_id',Auth::user()->id)->where('isAdmin','!=',0)->exists())
+						{
+							$post->publish = 1;
+						}
+						else {
+							$post->publish = 0;
+						}
 						$post->subtitle_id = $subtitle->id;
 						$post->user_id = Auth::user()->id;
 						$post->save();
+						Event::fire('new_post',[$subtitle->id,Auth::user()->username,Input::get('title')]);
 						return Redirect::route('subtitle',$subtitle->slug);
 					}
 					return Redirect::back()->withErrors($validator);

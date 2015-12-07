@@ -37,8 +37,9 @@ class SubtitleController extends BaseController {
 			$subtitle->description = Input::get('description');
 			$subtitle->unvalidcustomcss = Input::get('css');
 			$subtitle->save();
+			Event::fire('new_subtitle',[Auth::user()->username,Input::get('name')]);
 			DB::Table('user_subtitle')->insert(['user_id' => Auth::user()->id,'subtitle_id' => $subtitle->id,'isAdmin' => 1]);
-			return Redirect::route('subtitle',$subtitle->slug);
+			return Redirect::route('home');
 		}
 		return Redirect::back()->withErrors($validator);
 	}
