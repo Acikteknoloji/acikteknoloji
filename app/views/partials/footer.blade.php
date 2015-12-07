@@ -5,6 +5,7 @@
 </footer>
 <script type="text/javascript">
 var lastMessageID = 0;
+checkMessages();
 function checkMessages(){
   $.ajax('{{ Request::root() }}/notifs/' + lastMessageID,{
 
@@ -39,7 +40,7 @@ function checkMessages(){
             }
             var intervalM = setInterval(function(){
      checkMessages();
-},2000);
+},7000);
 $(".notifications").on("click","button#markasread", function (){
   var nid = $(this).data('pid');
     $.ajax('{{ Request::root() }}/markasread/' + nid,{data:{},success:function(data){}});

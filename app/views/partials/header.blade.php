@@ -23,7 +23,7 @@
         </li>
         <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bildirimler <span class="badge" id="notifcount"></span> <span class="caret"></span></a>
           <ul class="dropdown-menu notifications" id="notifications">
-
+            <li class="text-center"><h4>Gösterilecek başka bir bildirim yok</h4></li>
           </ul>
         </li>
         <li class="dropdown">

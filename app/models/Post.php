@@ -6,7 +6,7 @@ class Post extends Eloquent
 
   public function subtitle()
   {
-    return $this->belongsTo('subtitle');
+    return $this->belongsTo('Subtitle');
   }
 
   public function user()

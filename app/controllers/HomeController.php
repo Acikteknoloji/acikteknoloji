@@ -17,9 +17,16 @@ class HomeController extends BaseController {
 
 	public function showWelcome()
 	{
-		$subtitles = Subtitle::where('active',1)->paginate(15);
-		$posts = Post::Where('isComment',0)->where('publish',1)->take(30)->get();
-		return View::make('hello')->with(['posts' => $posts,'subtitles' => $subtitles]);
+		$posts = null;
+		if(Auth::check())
+		{
+			$followed = DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->lists('id');
+			$posts = Post::whereIn('subtitle_id',$followed)->where('publish',1)->where('isComment',0)->paginate(30);
+		}
+		else {
+			$posts = Post::Where('isComment',0)->where('publish',1)->paginate(30);
+		}
+		return View::make('hello')->with(['posts' => $posts]);
 	}
 
 	public function notifs($last)

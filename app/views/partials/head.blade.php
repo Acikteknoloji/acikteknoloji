@@ -33,6 +33,7 @@ body {
 }
 
 .notifications{
+  min-height:132px;
   max-height:264px;
   overflow-y:auto;
   overflow-x: hidden;
