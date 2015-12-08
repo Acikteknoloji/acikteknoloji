@@ -1,8 +1,8 @@
 <title>Açık Teknoloji</title>
-{{ HTML::Style('css/bootstrap.min.css') }}
-{{ HTML::Style('css/theme.min.css') }}
-{{ HTML::Script('js/jquery.min.js') }}
-{{ HTML::Script('js/bootstrap.min.js') }}
+<link media="all" type="text/css" rel="stylesheet" href="{{ Config::get('app.url')."/css/bootstrap.min.css" }}">
+<link media="all" type="text/css" rel="stylesheet" href="{{ Config::get('app.url')."/css/theme.min.css" }}">
+<script src="{{ Config::get('app.url')."/js/jquery.min.js" }}"></script>
+<script src="{{ Config::get('app.url')."/js/bootstrap.min.js" }}"></script>
 <style>
 html {
 position: relative;

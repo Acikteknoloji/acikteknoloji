@@ -7,11 +7,13 @@
 var lastMessageID = 0;
 checkMessages();
 function checkMessages(){
-  $.ajax('{{ Config::get('app.url') }}/notifs/' + lastMessageID,{
+  $.ajax({
 
+      url: '{{ Config::get('app.url') }}/notifs/' + lastMessageID,
+      jsonp: "callback",
       data:{},
+      dataType: "jsonp",
       success:function(data){
-      // Count new messages
       if (Object.keys(data).length > 0){
           $.each(data,function(index, item){
             $(".notifications").scrollTop();
@@ -30,7 +32,8 @@ function checkMessages(){
                 type: 'GET',
                 url: '{{ Config::get('app.url') }}/notifcount',
                 data: {},
-                dataType: 'json',
+                jsonp: "callback",
+                dataType: "jsonp",
                 success: function(data) {
                   $.each(data,function(index,element) {
                     $("#notifcount").text(element);
@@ -43,7 +46,7 @@ function checkMessages(){
 },7000);
 $(".notifications").on("click","button#markasread", function (){
   var nid = $(this).data('pid');
-    $.ajax('{{ Config::get('app.url') }}/markasread/' + nid,{data:{},success:function(data){}});
+    $.ajax('{{ Config::get('app.url') }}/markasread/' + nid,{data:{},jsonp: "callback",dataType: "jsonp",success:function(data){}});
     checkMessages();
     $("#n-" + nid).removeClass("unread");
     $("#n-" + nid).addClass("read");
@@ -56,7 +59,7 @@ $(".notifications").on("click","button#markasread", function (){
 
 $(".notifications").on("click","button#deletenotify", function (){
   var nid = $(this).data('pid');
-    $.ajax('{{ Config::get('app.url') }}/deletenotify/' + nid,{data:{},success:function(data){}});
+    $.ajax('{{ Config::get('app.url') }}/deletenotify/' + nid,{data:{},jsonp: "callback",dataType: "jsonp",success:function(data){}});
     checkMessages();
     $("#n-" + nid).remove();
 });

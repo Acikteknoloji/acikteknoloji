@@ -11,7 +11,6 @@
 |
 */
 Route::when('*','www');
-
 Route::group(['domain' => Config::get('app.domain')],function()
 {
   Route::get('/notifs/{last}',['as' => 'notifs','uses' => 'HomeController@notifs'])->before('auth');

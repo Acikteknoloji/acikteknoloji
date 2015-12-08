@@ -31,7 +31,7 @@ class HomeController extends BaseController {
 
 	public function notifs($last)
 	{
-		return Response::json(Notification::where('user_id',Auth::user()->id)->where('id','>',$last)->get());
+		return Response::json(Notification::where('user_id',Auth::user()->id)->where('id','>',$last)->get())->setCallback(Input::get('callback'));
 	}
 
 	public function markAsRead($id)
@@ -55,7 +55,7 @@ class HomeController extends BaseController {
 
 	public function notifCount()
 	{
-		return Response::json(["unread" => Auth::user()->unreadNotifs()]);
+		return Response::json(["unread" => Auth::user()->unreadNotifs()])->setCallback(Input::get('callback'));
 	}
 
 	public function search()
