@@ -36,7 +36,7 @@ class AdminController extends BaseController {
     if(Subtitle::where('slug',$slug)->exists())
     {
       $subtitle = Subtitle::where('slug',$slug)->first();
-      $subtitle->destroy($subtitle->id);
+      $subtitle->delete();
       return Redirect::route('admin.home');
     }
     App::abort(404); //TODO: Add Error Message(There is no subtitle found by given subtitle slug)

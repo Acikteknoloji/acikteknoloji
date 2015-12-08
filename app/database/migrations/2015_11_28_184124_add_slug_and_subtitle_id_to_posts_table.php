@@ -14,7 +14,7 @@ class AddSlugAndSubtitleIdToPostsTable extends Migration {
 	{
 		Schema::table('posts',function($table){
 			$table->integer('subtitle_id')->unsigned();
-			$table->foreign('subtitle_id')->references('id')->on('subtitles');
+			$table->foreign('subtitle_id')->references('id')->on('subtitles')->onDelete('cascade');
 		});
 	}
 

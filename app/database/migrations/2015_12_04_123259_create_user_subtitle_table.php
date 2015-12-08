@@ -18,8 +18,8 @@ class CreateUserSubtitleTable extends Migration {
 			$table->integer('subtitle_id')->unsigned();
 			$table->boolean('isAdmin')->default(0);
 
-			$table->foreign('user_id')->references('id')->on('users');
-			$table->foreign('subtitle_id')->references('id')->on('subtitles');
+			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('subtitle_id')->references('id')->on('subtitles')->onDelete('cascade');
 		});
 	}
 

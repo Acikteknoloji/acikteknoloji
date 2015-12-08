@@ -61,14 +61,15 @@ class HomeController extends BaseController {
 	public function search()
 	{
 		$term = Request::input('q');
-		$query = DB::table('subtitles')
-		->leftJoin('posts','subtitles.id','=','posts.subtitle_id')
-		->select('posts.*','subtitles.*','subtitles.id as sid','posts.id as pid')
-		->Where('subtitles.name','like','%'.$term.'%')
-		->orWhere('posts.title','like','%'.$term.'%')
-		->orWhere('posts.content','like','%'.$term.'%')
-		->orWhere('subtitles.description','like','%'.$term.'%')
-		->get();
+		$where = Request::input('where');
+		$query = null;
+		if($where == "subtitles")
+		{
+			$query = Subtitle::where('name','like','%'.$term.'%')->orWhere('description','like','%'.$term.'%')->paginate(30);
+		}
+		else {
+			$query = Post::where('title','like','%'.$term.'%')->orWhere('content','like','%'.$term.'%')->where('publish',1)->paginate(30);
+		}
 
 		return View::make('search')->with(['query' => $query]);
 	}

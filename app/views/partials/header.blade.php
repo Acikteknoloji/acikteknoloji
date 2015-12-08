@@ -16,6 +16,15 @@
       <ul class="nav navbar-nav">
         <li><a href="{{ Request::root() }}">Anasayfa</a></li>
       </ul>
+      <div class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          {{ Form::open(['route' => 'search','method' => 'get']) }}
+          {{ Form::text('q',Request::input('q'),['class' => 'form-control','placeholder' => 'Ara'])}}
+          {{ Form::hidden('where','posts') }}
+        </div>
+        <button type="submit" class="btn btn-default">Ara</button>
+        {{ Form::close() }}
+      </div>
       <ul class="nav navbar-nav navbar-right">
         @if(Auth::check())
         <li>

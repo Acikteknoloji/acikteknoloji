@@ -13,7 +13,7 @@
 		</div>
 	</div>
 @endforeach
-@if($posts->getTotal() > 1)
+@if($posts->getTotal() > 30)
 	<div class="row">
 		<div class="col-lg-6 col-lg-offset-3">
 			<div class="panel panel-default">
