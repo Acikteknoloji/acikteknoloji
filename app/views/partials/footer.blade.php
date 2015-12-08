@@ -7,7 +7,7 @@
 var lastMessageID = 0;
 checkMessages();
 function checkMessages(){
-  $.ajax('{{ Request::root() }}/notifs/' + lastMessageID,{
+  $.ajax('{{ Config::get('app.url') }}/notifs/' + lastMessageID,{
 
       data:{},
       success:function(data){
@@ -28,7 +28,7 @@ function checkMessages(){
 
               $.ajax({
                 type: 'GET',
-                url: '{{ Request::root() }}/notifcount',
+                url: '{{ Config::get('app.url') }}/notifcount',
                 data: {},
                 dataType: 'json',
                 success: function(data) {
@@ -43,7 +43,7 @@ function checkMessages(){
 },7000);
 $(".notifications").on("click","button#markasread", function (){
   var nid = $(this).data('pid');
-    $.ajax('{{ Request::root() }}/markasread/' + nid,{data:{},success:function(data){}});
+    $.ajax('{{ Config::get('app.url') }}/markasread/' + nid,{data:{},success:function(data){}});
     checkMessages();
     $("#n-" + nid).removeClass("unread");
     $("#n-" + nid).addClass("read");
@@ -56,7 +56,7 @@ $(".notifications").on("click","button#markasread", function (){
 
 $(".notifications").on("click","button#deletenotify", function (){
   var nid = $(this).data('pid');
-    $.ajax('{{ Request::root() }}/deletenotify/' + nid,{data:{},success:function(data){}});
+    $.ajax('{{ Config::get('app.url') }}/deletenotify/' + nid,{data:{},success:function(data){}});
     checkMessages();
     $("#n-" + nid).remove();
 });
