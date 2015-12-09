@@ -20,10 +20,10 @@ class HomeController extends BaseController {
 		$posts = null;
 		if(Auth::check())
 		{
-			$posts = Post::whereIn('subtitle_id',Auth::user()->subtitles()->lists('subtitle_id'))->where('publish',1)->where('isComment',0)->paginate(30);
+			$posts = Post::whereIn('subtitle_id',Auth::user()->subtitles()->lists('subtitle_id'))->where('publish',1)->where('isComment',0)->orderBy('created_at','DESC')->paginate(30);
 		}
 		else {
-			$posts = Post::Where('isComment',0)->where('publish',1)->paginate(30);
+			$posts = Post::Where('isComment',0)->where('publish',1)->orderBy('created_at','DESC')->paginate(30);
 		}
 		return View::make('hello')->with(['posts' => $posts]);
 	}
