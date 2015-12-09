@@ -43,17 +43,22 @@
 }
 @stop
 @section('content')
-@if ($errors->has())
+@if ($errors->count() > 0)
         <div class="alert alert-danger">
             @foreach ($errors->all() as $error)
                 {{ $error }}<br>
             @endforeach
         </div>
         @endif
+        @if(isset($lorc))
+        <div class="alert alert-danger">
+          {{ $lorc }}
+        </div>
+        @endif
 {{ Form::open() }}
-  {{ Form::text('title',null,['class' => 'form-control','placeholder' => 'Gönderi Başlığı']) }}<br />
-  {{ Form::text('link',null,['class' => 'form-control','placeholder' => 'Link gönderisi ise link(http://www.google.com/)']) }}<br />
-  {{ Form::textarea('content',null,['class' => 'form-control','placeholder' => 'Gönderi','data-uk-htmleditor' => '{markdown:true}']) }}<br />
+  {{ Form::text('title',Input::old('title'),['class' => 'form-control','placeholder' => 'Gönderi Başlığı']) }}<br />
+  {{ Form::text('link',Input::old('link'),['class' => 'form-control','placeholder' => 'Link gönderisi ise link(http://www.google.com/)']) }}<br />
+  {{ Form::textarea('content',Input::old('content'),['class' => 'form-control','placeholder' => 'Gönderi','data-uk-htmleditor' => '{markdown:true}']) }}<br />
   {{ Form::submit('Gönderi Oluştur',['class' => 'btn btn-lg btn-success'] )}}
 {{ Form::close() }}
 @stop

@@ -85,6 +85,7 @@ class PostController extends BaseController {
 
 	public function createPost($subtitle)
 	{
+		$errorMessages = new Illuminate\Support\MessageBag;
 		if(Subtitle::where('slug',$subtitle)->exists())
 		{
 			$subtitle = Subtitle::where('slug',$subtitle)->first();
@@ -92,10 +93,10 @@ class PostController extends BaseController {
 			{
 				if(DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->where('subtitle_id',$subtitle->id)->exists())
 				{
-					$rules = ["title" => "required|min:9","content" => "required"];
+					$rules = ["title" => "required|min:9","link" => "url"];
 					$inputs = Input::all();
 					$validator = Validator::make($inputs,$rules);
-					if($validator->passes())
+					if($validator->passes() && (Input::has('link') || Input::has('content')))
 					{
 						$link = null;
 						$post = new Post();
@@ -120,7 +121,15 @@ class PostController extends BaseController {
 						$post->save();
 						return Redirect::route('subtitle',$subtitle->slug);
 					}
-					return Redirect::back()->withErrors($validator);
+					if(!(Input::has('link') || Input::has('content')))
+					{
+						$errorMessages->add("required","Link veya İçerik boş bırakılamaz.Lütfen ikisinden birini doldurunuz!");
+					}
+					if($validator->fails())
+					{
+						$errorMessages->merge($validator->errors()->toArray());
+					}
+					return Redirect::back()->with(['errors' =>  $errorMessages])->withInput();
 				}
 				return Redirect::route('subtitle',$subtitle->slug);
 			}
