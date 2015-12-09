@@ -20,8 +20,7 @@ class HomeController extends BaseController {
 		$posts = null;
 		if(Auth::check())
 		{
-			$followed = DB::Table('user_subtitle')->where('user_id',Auth::user()->id)->lists('id');
-			$posts = Post::whereIn('subtitle_id',$followed)->where('publish',1)->where('isComment',0)->paginate(30);
+			$posts = Post::whereIn('subtitle_id',Auth::user()->subtitles()->lists('subtitle_id'))->where('publish',1)->where('isComment',0)->paginate(30);
 		}
 		else {
 			$posts = Post::Where('isComment',0)->where('publish',1)->paginate(30);

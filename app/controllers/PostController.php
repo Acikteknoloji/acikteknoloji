@@ -113,11 +113,11 @@ class PostController extends BaseController {
 						}
 						else {
 							$post->publish = 0;
+							Event::fire('new_post',[$subtitle->id,Auth::user()->username,Input::get('title')]);
 						}
 						$post->subtitle_id = $subtitle->id;
 						$post->user_id = Auth::user()->id;
 						$post->save();
-						Event::fire('new_post',[$subtitle->id,Auth::user()->username,Input::get('title')]);
 						return Redirect::route('subtitle',$subtitle->slug);
 					}
 					return Redirect::back()->withErrors($validator);
